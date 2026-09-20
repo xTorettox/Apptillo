@@ -40,7 +40,7 @@ jobs:
           "
           yarn install --ignore-engines
 
-      - name: Parche maestro para Android Plugin
+      - name: Parche maestro para Android Plugin y dependencias
         run: |
           sed -i -E 's/com\.android\.tools\.build:gradle:[0-9\.]+/com.android.tools.build:gradle:8.0.2/g' android/build.gradle || true
           sed -i -E "s/id\s*\(\s*['\"]com.android.application['\"]\s*\)\s*version\s*['\"][0-9\.]+['\"]/id('com.android.application') version '8.0.2'/g" android/build.gradle || true
@@ -48,6 +48,7 @@ jobs:
           sed -i -E 's/kotlinVersion\s*=\s*["'"'"'][0-9\.]+["'"'"']/kotlinVersion = "1.8.20"/g' android/build.gradle || true
           echo "android.defaults.buildfeatures.buildconfig=true" >> android/gradle.properties
           sed -i 's/android {/android { namespace "com.rnfs"; /g' node_modules/react-native-fs/android/build.gradle || true
+          sed -i 's/\.directories/\.srcDirs/g' node_modules/react-native-safe-area-context/android/build.gradle || true
 
       - name: Compilar el APK
         run: cd android && gradle assembleDebug
