@@ -16,21 +16,25 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
 
-      - name: Configurar Java 17
-        uses: actions/setup-java@v5
+      - name: Configurar Java
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Instalar dependencias exactas
-        run: |
-          npm install --legacy-peer-deps
-          npm install @react-native-community/cli-platform-android@11.3.10 --no-save
+      - name: Instalar dependencias con Yarn
+        run: yarn install
+
+      - name: Generar archivos Gradle faltantes
+        run: cd android && gradle wrapper
+
+      - name: Dar permisos al gradlew
+        run: chmod +x android/gradlew
 
       - name: Compilar el APK
-        run: cd android && gradle assembleDebug
+        run: cd android && ./gradlew assembleDebug
 
       - name: Guardar el APK generado
         uses: actions/upload-artifact@v4
