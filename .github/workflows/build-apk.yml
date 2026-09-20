@@ -24,10 +24,10 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Forzar Gradle 8.3 Global
+      - name: Forzar Gradle 8.0.1 Global
         uses: gradle/actions/setup-gradle@v3
         with:
-          gradle-version: '8.3'
+          gradle-version: '8.0.1'
 
       - name: Sincronizar versiones React Native
         run: |
@@ -39,6 +39,9 @@ jobs:
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
           "
           yarn install --ignore-engines
+
+      - name: Forzar versión Kotlin (Parche)
+        run: sed -i 's/kotlinVersion = "1.7.1"/kotlinVersion = "1.8.0"/g' android/build.gradle || true
 
       - name: Compilar el APK
         run: cd android && gradle assembleDebug
