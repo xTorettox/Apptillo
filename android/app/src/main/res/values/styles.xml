@@ -1,0 +1,8 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Fondo negro profundo para TV y OLED -->
+        <item name="android:windowBackground">#120d1c</item>
+        <item name="android:statusBarColor">#120d1c</item>
+        <item name="android:navigationBarColor">#120d1c</item>
+    </style>
+</resources>
