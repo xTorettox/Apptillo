@@ -24,13 +24,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Instalar dependencias con Yarn
+      - name: Instalar dependencias base
         run: yarn install
 
-      - name: Parchear rutas viejas de AG
-        run: |
-          sed -i 's/@react-native-community\/cli-platform-android/@react-native\/gradle-plugin/g' android/settings.gradle
-          sed -i 's/@react-native-community\/cli-platform-android/@react-native\/gradle-plugin/g' android/app/build.gradle
+      - name: El parche de la redención (traer el paquete fantasma)
+        run: yarn add @react-native-community/cli-platform-android@11.3.10 --dev --ignore-engines
 
       - name: Generar archivos Gradle
         run: cd android && gradle wrapper
