@@ -46,6 +46,7 @@ jobs:
           sed -i -E "s/id\s*\(\s*['\"]com.android.application['\"]\s*\)\s*version\s*['\"][0-9\.]+['\"]/id('com.android.application') version '8.0.2'/g" android/build.gradle || true
           sed -i -E "s/id\s*['\"]com.android.application['\"]\s*version\s*['\"][0-9\.]+['\"]/id 'com.android.application' version '8.0.2'/g" android/build.gradle || true
           sed -i -E 's/kotlinVersion\s*=\s*["'"'"'][0-9\.]+["'"'"']/kotlinVersion = "1.8.20"/g' android/build.gradle || true
+          echo "android.defaults.buildfeatures.buildconfig=true" >> android/gradle.properties
 
       - name: Compilar el APK
         run: cd android && gradle assembleDebug
