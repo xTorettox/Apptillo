@@ -24,7 +24,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Sincronizar versiones
+      - name: Forzar Gradle 8.3 Global
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.3'
+
+      - name: Sincronizar versiones React Native
         run: |
           node -e "
             const fs = require('fs');
@@ -36,7 +41,7 @@ jobs:
           yarn install --ignore-engines
 
       - name: Compilar el APK
-        run: cd android && gradle wrapper --gradle-version 8.3 && chmod +x gradlew && ./gradlew assembleDebug
+        run: cd android && gradle assembleDebug
 
       - name: Guardar el APK generado
         uses: actions/upload-artifact@v4
