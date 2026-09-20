@@ -24,19 +24,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Instalar dependencias base y faltantes
+      - name: Instalar dependencias exactas
         run: |
           npm install --legacy-peer-deps
-          npm install @react-native-community/cli-platform-android --no-save
-
-      - name: Generar archivos Gradle faltantes
-        run: cd android && gradle wrapper
-
-      - name: Dar permisos al gradlew
-        run: chmod +x android/gradlew
+          npm install @react-native-community/cli-platform-android@11.3.10 --no-save
 
       - name: Compilar el APK
-        run: cd android && ./gradlew assembleDebug
+        run: cd android && gradle assembleDebug
 
       - name: Guardar el APK generado
         uses: actions/upload-artifact@v4
