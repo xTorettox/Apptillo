@@ -49,6 +49,7 @@ jobs:
           sed -i -E 's/kotlinVersion\s*=\s*["'"'"'][0-9\.]+["'"'"']/kotlinVersion = "1.8.20"/g' android/build.gradle || true
           echo "android.defaults.buildfeatures.buildconfig=true" >> android/gradle.properties
           sed -i 's/android {/android { namespace "com.rnfs"; /g' node_modules/react-native-fs/android/build.gradle || true
+          sed -i 's/android {/android { namespace "com.zmxv.RNSound"; /g' node_modules/react-native-sound/android/build.gradle || true
 
       - name: Compilar el APK
         run: cd android && gradle assembleDebug
