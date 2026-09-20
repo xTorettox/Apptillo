@@ -27,6 +27,9 @@ jobs:
       - name: Instalar dependencias
         run: npm install
 
+      - name: Generar archivos Gradle faltantes
+        run: cd android && gradle wrapper
+
       - name: Dar permisos al gradlew
         run: chmod +x android/gradlew
 
