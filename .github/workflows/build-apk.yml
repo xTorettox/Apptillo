@@ -27,10 +27,15 @@ jobs:
       - name: Instalar dependencias con Yarn
         run: yarn install
 
-      - name: Generar archivos Gradle faltantes
+      - name: Parchear rutas viejas de AG
+        run: |
+          sed -i 's/@react-native-community\/cli-platform-android/@react-native\/gradle-plugin/g' android/settings.gradle
+          sed -i 's/@react-native-community\/cli-platform-android/@react-native\/gradle-plugin/g' android/app/build.gradle
+
+      - name: Generar archivos Gradle
         run: cd android && gradle wrapper
 
-      - name: Dar permisos al gradlew
+      - name: Dar permisos
         run: chmod +x android/gradlew
 
       - name: Compilar el APK
