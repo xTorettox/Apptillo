@@ -16,7 +16,7 @@ jobs:
       - name: 1. Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 2. Setup Node.js
+      - name: 2. Setup Node.js (v22)
         uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -27,11 +27,14 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 4. Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: 5. Setup Gradle Cache
+      - name: 4. Setup Gradle Cache & Environment
         uses: gradle/actions/setup-gradle@v4
+
+      - name: 5. Accept Android SDK Licenses
+        run: |
+          mkdir -p $HOME/.android
+          touch $HOME/.android/repositories.cfg
+          yes | sdkmanager --licenses > /dev/null 2>&1 || true
 
       - name: 6. Install NPM Dependencies
         run: npm install --legacy-peer-deps
