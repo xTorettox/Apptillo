@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Cartucho Retro 8-Bits -->
+    <path
+        android:fillColor="#b5b5b5"
+        android:pathData="M34,24h40v60h-40z" />
+    <path
+        android:fillColor="#782323"
+        android:pathData="M38,32h32v32h-32z" />
+    <path
+        android:fillColor="#00ffcc"
+        android:pathData="M44,40h20v8h-20z" />
+    <path
+        android:fillColor="#ffb703"
+        android:pathData="M44,52h10v4h-10z" />
+    <!-- Ranura inferior -->
+    <path
+        android:fillColor="#545454"
+        android:pathData="M38,76h32v4h-32z" />
+</vector>
