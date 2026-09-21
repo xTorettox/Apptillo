@@ -17,7 +17,7 @@ class MainApplication : Application(), ReactApplication {
         object : DefaultReactNativeHost(this) {
             override fun getPackages(): List<ReactPackage> =
                 PackageList(this).packages.apply {
-                    // Módulos que no son autolinkeados automáticamente
+                    // Módulo nativo para RetroArch
                     add(RetroLauncherPackage())
                 }
 
@@ -36,7 +36,11 @@ class MainApplication : Application(), ReactApplication {
         super.onCreate()
         SoLoader.init(this, false)
         if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-            load()
+            try {
+                load()
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
         }
     }
 }
