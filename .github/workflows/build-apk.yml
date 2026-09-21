@@ -50,8 +50,8 @@ jobs:
           echo "android.defaults.buildfeatures.buildconfig=true" >> android/gradle.properties
           sed -i 's/android {/android { namespace "com.rnfs"; /g' node_modules/react-native-fs/android/build.gradle || true
           sed -i 's/android {/android { namespace "com.zmxv.RNSound"; /g' node_modules/react-native-sound/android/build.gradle || true
-          sed -i 's/@mipmap\/ic_launcher/@android:drawable\/sym_def_app_icon/g' android/app/src/main/AndroidManifest.xml || true
-          sed -i 's/@mipmap\/ic_launcher_round/@android:drawable\/sym_def_app_icon/g' android/app/src/main/AndroidManifest.xml || true
+          sed -i -E 's/android:icon="[^"]+"//g' android/app/src/main/AndroidManifest.xml || true
+          sed -i -E 's/android:roundIcon="[^"]+"//g' android/app/src/main/AndroidManifest.xml || true
 
       - name: Compilar el APK
         run: cd android && gradle assembleDebug
