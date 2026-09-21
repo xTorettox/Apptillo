@@ -1,63 +1,69 @@
-name: Build Android APK
+name: Build Android APK (El Altillo 8-Bits)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
-  build:
+  build-android:
+    name: Build Standalone Android APK
     runs-on: ubuntu-latest
 
     steps:
-      - name: Bajar el código
+      - name: 1. Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js 18
+      - name: 2. Setup Node.js (v20)
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: 20
+          cache: 'npm'
 
-      - name: Configurar Java 17
-        uses: actions/setup-java@v5
+      - name: 3. Setup Java JDK 17
+        uses: actions/setup-java@v4
         with:
-          java-version: '17'
           distribution: 'temurin'
+          java-version: '17'
 
-      - name: Forzar Gradle 8.0.1 Global
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: '8.0.1'
+      - name: 4. Setup Android SDK
+        uses: android-actions/setup-android@v3
 
-      - name: Sincronizar versiones y actualizar paquetes viejos
+      - name: 5. Setup Gradle Cache
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: 6. Install Node Dependencies
+        run: npm ci || npm install --legacy-peer-deps
+
+      - name: 7. Bundle Offline React Native Assets
         run: |
-          node -e "
-            const fs = require('fs');
-            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            pkg.dependencies['react-native'] = '0.72.10';
-            pkg.dependencies['react'] = '18.2.0';
-            pkg.dependencies['react-native-safe-area-context'] = '4.10.0';
-            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
-          "
-          yarn install --ignore-engines
+          mkdir -p android/app/src/main/assets
+          npx react-native bundle \
+            --platform android \
+            --dev false \
+            --entry-file index.js \
+            --bundle-output android/app/src/main/assets/index.android.bundle \
+            --assets-dest android/app/src/main/res
 
-      - name: Parche maestro para Android Plugin e Íconos
+      - name: 8. Build Android APKs (Debug & Release)
+        working-directory: android
         run: |
-          sed -i -E 's/com\.android\.tools\.build:gradle:[0-9\.]+/com.android.tools.build:gradle:8.0.2/g' android/build.gradle || true
-          sed -i -E "s/id\s*\(\s*['\"]com.android.application['\"]\s*\)\s*version\s*['\"][0-9\.]+['\"]/id('com.android.application') version '8.0.2'/g" android/build.gradle || true
-          sed -i -E "s/id\s*['\"]com.android.application['\"]\s*version\s*['\"][0-9\.]+['\"]/id 'com.android.application' version '8.0.2'/g" android/build.gradle || true
-          sed -i -E 's/kotlinVersion\s*=\s*["'"'"'][0-9\.]+["'"'"']/kotlinVersion = "1.8.20"/g' android/build.gradle || true
-          echo "android.defaults.buildfeatures.buildconfig=true" >> android/gradle.properties
-          sed -i 's/android {/android { namespace "com.rnfs"; /g' node_modules/react-native-fs/android/build.gradle || true
-          sed -i 's/android {/android { namespace "com.zmxv.RNSound"; /g' node_modules/react-native-sound/android/build.gradle || true
-          sed -i 's/@mipmap\/ic_launcher_round/@android:drawable\/sym_def_app_icon/g' android/app/src/main/AndroidManifest.xml || true
-          sed -i 's/@mipmap\/ic_launcher/@android:drawable\/sym_def_app_icon/g' android/app/src/main/AndroidManifest.xml || true
+          chmod +x gradlew || true
+          ./gradlew assembleDebug assembleRelease --no-daemon
 
-      - name: Compilar el APK
-        run: cd android && gradle assembleDebug
-
-      - name: Guardar el APK generado
+      - name: 9. Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: altillo-apk
+          name: El-Altillo-8Bits-Debug-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+
+      - name: 10. Upload Release APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: El-Altillo-8Bits-Release-APK
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          retention-days: 30
+          if-no-files-found: ignore
