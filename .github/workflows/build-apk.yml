@@ -32,11 +32,12 @@ jobs:
         with:
           gradle-version: "8.10.2"
 
-      - name: 5. Accept Android SDK Licenses
+      - name: 5. Setup Android NDK 26.1 & Licenses
         run: |
           mkdir -p $HOME/.android
           touch $HOME/.android/repositories.cfg
           yes | sdkmanager --licenses > /dev/null 2>&1 || true
+          yes | sdkmanager "ndk;26.1.10909125" "cmake;3.22.1" > /dev/null 2>&1 || true
 
       - name: 6. Install NPM Dependencies
         run: npm install --legacy-peer-deps
