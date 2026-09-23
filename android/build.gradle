@@ -4,7 +4,7 @@ buildscript {
         minSdkVersion = 24
         compileSdkVersion = 35
         targetSdkVersion = 35
-        ndkVersion = "27.1.12297006"
+        ndkVersion = "26.1.10909125"
         kotlinVersion = "2.0.21"
     }
     repositories {
@@ -22,14 +22,6 @@ apply plugin: "com.facebook.react.rootproject"
 
 allprojects {
     repositories {
-        maven {
-            // Binarios nativos (.so) de React Native y Hermes instalados desde NPM
-            url("$rootDir/../node_modules/react-native/android")
-        }
-        maven {
-            // Binarios nativos (.so) de JSC instalados desde NPM
-            url("$rootDir/../node_modules/jsc-android/dist")
-        }
         mavenCentral()
         google()
     }

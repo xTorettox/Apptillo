@@ -12,13 +12,10 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.1.0",
     "@react-native-google-signin/google-signin": "^13.1.0",
-    "jsc-android": "^250230.2.1",
     "react": "18.3.1",
     "react-native": "0.76.6",
     "react-native-blob-util": "^0.19.11",
-    "react-native-fs": "^2.20.0",
-    "react-native-safe-area-context": "^5.1.0",
-    "react-native-sound": "^0.11.2"
+    "react-native-safe-area-context": "^5.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
